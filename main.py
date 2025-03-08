@@ -1,5 +1,7 @@
 import random
-
+import init
+import tr_rc
+import numpy as np
 print("Hello World")
 import cv2
 
@@ -9,117 +11,55 @@ print("Высота:"+str(frame.shape[0]))
 print("Ширина:" + str(frame.shape[1]))
 print("Количество каналов:" + str(frame.shape[2]))
 
-channel_1=frame
-channel_2=frame
-channel_3=frame
-channel_4=frame
-channel_5=frame
-channel_6=frame
-channel_7=frame
-channel_8=frame
-channel_9=frame
+height = 480
+width = 640
 
-def transmit(frame):
-    for i in range(0,480):
-        if i<=160:
-            for j in range(0,640):
-                if j<=210:
-                    #frame[i,j][0]=0     #zone 1
-                    channel_1[i,j]=frame[i,j]
-                if j>210 and j<430:
-                    #frame[i,j][1]=127   #zone 2
-                    channel_2[i,j]=frame[i,j]
-                if j>=430:
-                    #frame[i,j][2]=255   #zone 3
-                    channel_3[i,j]=frame[i,j]
-        if i>160 and i<320:
-            for j in range(0,640):
-                if j<=210:
-                    #frame[i,j][0]=255     #zone 4
-                    channel_4[i,j]=frame[i,j]
-                if j>210 and j<430:
-                    #frame[i,j][1]=0   #zone 5
-                    channel_5[i,j]=frame[i,j]
-                if j>=430:
-                    #frame[i,j][2]=127   #zone 6
-                    channel_6[i,j]=frame[i,j]
-        if i>=320:
-            for j in range(0,640):
-                if j<=210:
-                    #frame[i,j][0]=127     #zone 7
-                    channel_7[i,j]=frame[i,j]
-                if j>210 and j<430:
-                    #frame[i,j][1]=255   #zone 8
-                    channel_8[i,j]=frame[i,j]
-                if j>=430:
-                    #frame[i,j][2]=0   #zone 9
-                    channel_9[i,j]=frame[i,j]
+count_pixels_per_ch = (640*480*2)/9
 
-def efir(koefficent):
-    for i in range(0,480):
-        if i<=160:
-            for j in range(0,640):
-                if j<=210:
-                    channel_1[i,j][0]+=koefficent*random.randint(0,100)
-                    channel_1[i,j][1]+=koefficent*random.randint(0,100)
-                    channel_1[i,j][2]+=koefficent*random.randint(0,100)
-                if j>210 and j<430:
-                    channel_2[i,j][1]+=koefficent*random.randint(0,100)
-                if j>=430:
-                    channel_3[i,j][2]+=koefficent*random.randint(0,100)
-        if i>160 and i<320:
-            for j in range(0,640):
-                if j<=210:
-                    channel_4[i,j][0]+=koefficent*random.randint(0,100)
-                if j>210 and j<430:
-                    channel_5[i,j][0]+=koefficent*random.randint(0,100)
-                if j>=430:
-                    channel_6[i,j][0]+=koefficent*random.randint(0,100)
-        if i>=320:
-            for j in range(0,640):
-                if j<=210:
-                    channel_7[i,j][0]+=koefficent*random.randint(0,100)
-                if j>210 and j<430:
-                    channel_8[i,j][0]+=koefficent*random.randint(0,100)
-                if j>=430:
-                    channel_9[i,j][0]+=koefficent*random.randint(0,100)
+channel_0=init.init_chan(0,width,height,0)
+channel_1=init.init_chan(1,width,height,0)
+channel_2=init.init_chan(2,width,height,0)
+channel_3=init.init_chan(3,width,height,0)
+print("Высота c0:"+str(channel_0.shape[0]))
+print("Ширина c0:" + str(channel_0.shape[1]))
 
-def recieve(frame):
-    for i in range(0,480):
-        if i<=160:
-            for j in range(0,640):
-                if j<=210:
-                    frame[i,j]=channel_1[i,j]
-                if j>210 and j<430:
-                    frame[i,j]=channel_2[i,j]
-                if j>=430:
-                    frame[i,j]=channel_3[i,j]
-        if i>160 and i<320:
-            for j in range(0,640):
-                if j<=210:
-                    frame[i,j]=channel_4[i,j]
-                if j>210 and j<430:
-                    frame[i,j]=channel_5[i,j]
-                if j>=430:
-                    frame[i,j]=channel_6[i,j]
-        if i>=320:
-            for j in range(0,640):
-                if j<=210:
-                    frame[i,j]=channel_7[i,j]
-                if j>210 and j<430:
-                    frame[i,j]=channel_8[i,j]
-                if j>=430:
-                    frame[i,j]=channel_9[i,j]
+main_ch = 0
 
+channels=tr_rc.split_pic_0(frame,width,height,channel_0,channel_1,channel_2,channel_3,0)
+
+channel_0=channels[0]
+channel_1=channels[1]
+channel_2=channels[2]
+channel_3=channels[3]
+
+# tr_rc.noise_for_ch_0(channel_0,width,height)
+
+# tr_rc.assemble_pic_0(frame,width,height,channel_0,channel_1,channel_2,channel_3,0)
+# print(frame)
 while True:
     # Считываем изображение с камеры
     ret,frame = cap.read()
     cv2.imshow('transmitter', frame)
-    transmit(frame)
-    efir(0.5)
-    recieve(frame)
-    # Отображаем изображение в окне
 
+    # Отображаем изображение в окне
+    #tr_rc.split_pic_0(frame,width,height,channel_0,channel_1,channel_2,channel_3,0)
+    channels=tr_rc.split_pic_0(frame,width,height,channel_0,channel_1,channel_2,channel_3,0)
+
+    channel_0=channels[0]
+    channel_1=channels[1]
+    channel_2=channels[2]
+    channel_3=channels[3]
+    # channel_0=tr_rc.noise_for_ch_0(channel_0,width,height)
+    # channel_1=tr_rc.noise_for_ch_0(channel_1,width,height)
+    channel_2=tr_rc.noise_for_ch_0(channel_0,width,height)
+    channel_2=tr_rc.noise_for_ch_0(channel_1,width,height)
+    channel_2=tr_rc.noise_for_ch_0(channel_2,width,height)
+
+    frame=tr_rc.assemble_pic_0(frame,width,height,channel_0,channel_1,channel_2,channel_3,0)
+    cv2.imshow('channel_0', channel_0)
+    cv2.imshow('channel_1', channel_1)
+    cv2.imshow('channel_2', channel_2)
+    cv2.imshow('channel_3', channel_3)
 
     cv2.imshow('Reciever', frame)
     # Закрыть окно можно на клавишу 'Esc'
