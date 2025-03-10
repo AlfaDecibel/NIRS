@@ -51,9 +51,9 @@ while True:
     channel_3=channels[3]
     # channel_0=tr_rc.noise_for_ch_0(channel_0,width,height)
     # channel_1=tr_rc.noise_for_ch_0(channel_1,width,height)
-    channel_2=tr_rc.noise_for_ch_0(channel_0,width,height)
-    channel_2=tr_rc.noise_for_ch_0(channel_1,width,height)
-    channel_2=tr_rc.noise_for_ch_0(channel_2,width,height)
+    #channel_2=tr_rc.noise_for_ch_0(channel_0,width,height)
+    #channel_2=tr_rc.noise_for_ch_0(channel_1,width,height)
+    #channel_2=tr_rc.noise_for_ch_0(channel_2,width,height)
 
     frame=tr_rc.assemble_pic_0(frame,width,height,channel_0,channel_1,channel_2,channel_3,0)
     cv2.imshow('channel_0', channel_0)

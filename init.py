@@ -4,7 +4,7 @@
 import numpy as np
 import cv2
 
-def init_chan(num,width,height,met_of_split):
+def init_chan(num,width,height,met_of_split): #new channel generate
 
     #  metod 0
     #  00000001111111
@@ -14,19 +14,11 @@ def init_chan(num,width,height,met_of_split):
     #  22222223333333
     #  22222223333333
 
-    if(met_of_split==0):
-        height_ch=int((height/2)*2)
-        width_ch=int(width/2)
-        image = np.zeros((height_ch, width_ch, 3), dtype=np.uint8)
+    if(met_of_split==0):    #if method of splitting is 0 (for 4 polygons)
+        height_ch=int((height/2)) #calculation of image height
+        width_ch=int(width/2) #calculation of image width
+        image = np.zeros((height_ch, width_ch, 3), dtype=np.uint8) #filling image zeros
         for i in range(height_ch):
             for j in range(width_ch):
-                image[i][j] = [i + j, i, j]  # Пример градиента (B, G, R)
+                image[i][j] = [i + j, i, j]  #filling image gradient
         return image
-
-    #  metod 1
-    #  000001111122222
-    #  000001111122222
-    #  333334444455555
-    #  333334444455555
-    #  666667777788888
-    #  666667777788888
