@@ -32,6 +32,8 @@ channel_1=channels[1]
 channel_2=channels[2]
 channel_3=channels[3]
 
+cords=[0,0]
+
 # tr_rc.noise_for_ch_0(channel_0,width,height)
 
 # tr_rc.assemble_pic_0(frame,width,height,channel_0,channel_1,channel_2,channel_3,0)
@@ -49,17 +51,16 @@ while True:
     channel_1=channels[1]
     channel_2=channels[2]
     channel_3=channels[3]
-    # channel_0=tr_rc.noise_for_ch_0(channel_0,width,height)
-    # channel_1=tr_rc.noise_for_ch_0(channel_1,width,height)
-    #channel_2=tr_rc.noise_for_ch_0(channel_0,width,height)
-    #channel_2=tr_rc.noise_for_ch_0(channel_1,width,height)
-    #channel_2=tr_rc.noise_for_ch_0(channel_2,width,height)
 
-    frame=tr_rc.assemble_pic_0(frame,width,height,channel_0,channel_1,channel_2,channel_3,0)
-    cv2.imshow('channel_0', channel_0)
-    cv2.imshow('channel_1', channel_1)
-    cv2.imshow('channel_2', channel_2)
-    cv2.imshow('channel_3', channel_3)
+    cords=channels[4]
+
+    channels=tr_rc.noise_for_ch_0(channels,width,height,0)
+
+    frame=tr_rc.assemble_pic_0(frame,width,height,channels,0,cords)
+    cv2.imshow('channel_0', channels[0])
+    cv2.imshow('channel_1', channels[1])
+    cv2.imshow('channel_2', channels[2])
+    cv2.imshow('channel_3', channels[3])
 
     cv2.imshow('Reciever', frame)
     # Закрыть окно можно на клавишу 'Esc'
