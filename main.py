@@ -2,7 +2,6 @@ import random
 import init
 import tr_rc
 import numpy as np
-print("Hello World")
 import cv2
 
 cap = cv2.VideoCapture(0)
@@ -14,16 +13,12 @@ print("Количество каналов:" + str(frame.shape[2]))
 height = 480
 width = 640
 
-count_pixels_per_ch = (640*480*2)/9
-
+# Инициализация каналов
+# Initialization of channels
 channel_0=init.init_chan(0,width,height,0)
 channel_1=init.init_chan(1,width,height,0)
 channel_2=init.init_chan(2,width,height,0)
 channel_3=init.init_chan(3,width,height,0)
-print("Высота c0:"+str(channel_0.shape[0]))
-print("Ширина c0:" + str(channel_0.shape[1]))
-
-main_ch = 0
 
 channels=tr_rc.split_pic_0(frame,width,height,channel_0,channel_1,channel_2,channel_3,0)
 
@@ -34,27 +29,16 @@ channel_3=channels[3]
 
 cords=[0,0]
 
-# tr_rc.noise_for_ch_0(channel_0,width,height)
-
-# tr_rc.assemble_pic_0(frame,width,height,channel_0,channel_1,channel_2,channel_3,0)
-# print(frame)
 while True:
     # Считываем изображение с камеры
     ret,frame = cap.read()
     cv2.imshow('transmitter', frame)
 
-    # Отображаем изображение в окне
-    #tr_rc.split_pic_0(frame,width,height,channel_0,channel_1,channel_2,channel_3,0)
     channels=tr_rc.split_pic_0(frame,width,height,channel_0,channel_1,channel_2,channel_3,0)
-
-    channel_0=channels[0]
-    channel_1=channels[1]
-    channel_2=channels[2]
-    channel_3=channels[3]
 
     cords=channels[4]
 
-    channels=tr_rc.noise_for_ch_0(channels,width,height,0)
+    # channels=tr_rc.noise_for_ch_0(channels,width,height,0)
 
     frame=tr_rc.assemble_pic_0(frame,width,height,channels,0,cords)
     cv2.imshow('channel_0', channels[0])

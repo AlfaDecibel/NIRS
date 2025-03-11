@@ -17,8 +17,8 @@ def init_chan(num,width,height,met_of_split): #new channel generate
     if(met_of_split==0):    #if method of splitting is 0 (for 4 polygons)
         height_ch=int((height/2)) #calculation of image height
         width_ch=int(width/2) #calculation of image width
-        image = np.zeros((height_ch, width_ch, 3), dtype=np.uint8) #filling image zeros
-        for i in range(height_ch):
-            for j in range(width_ch):
+        image = np.zeros(( width_ch,height_ch, 3), dtype=np.uint8) #filling image zeros
+        for i in range(width_ch):
+            for j in range(height_ch):
                 image[i][j] = [i + j, i, j]  #filling image gradient
         return image

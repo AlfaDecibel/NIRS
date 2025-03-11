@@ -2,6 +2,7 @@ import init
 import random
 import numpy as np
 
+
 def split_pic_0(frame,width,height,channel_0,channel_1,channel_2,channel_3,main_ch):
     buf_main = init.init_chan(0,width,int(height)+1,0)
 
@@ -15,63 +16,46 @@ def split_pic_0(frame,width,height,channel_0,channel_1,channel_2,channel_3,main_
     # x_ver = 0
     # y_ver = 0
     print("красный пиксель: x="+str(x_ver)+" y="+str(y_ver))
-    for i in range(int(width)):
-        for j in range(height):
-            if(i<width_ch):
-                if(j<height_ch):    #zero part
-                    channel_0[j][i]=frame[j][i]
-                    if(main_ch==0):
-                        buf_main[j][i]=frame[j][i]
+    for x in range(int(width)):
+        for y in range(int(height)):
+            if(x<width_ch):
+                if(y<height_ch):    #zero part
+                    channel_0[x][y]=frame[y][x]
                 else:                   #second part
-                    channel_2[j-height_ch][i]=frame[j][i]
-                    if(main_ch==2):
-                        buf_main[j-height_ch][i]=frame[j][i]
+                    channel_2[x][y-height_ch]=frame[y][x]
             else:
-                if(j<height_ch):    #first part
-                    channel_1[j][i-width_ch]=frame[j][i]
-                    if(main_ch==1):
-                        buf_main[j][i-width_ch]=frame[j][i]
+                if(y<height_ch):    #first part
+                    channel_1[x-width_ch][y]=frame[y][x]
                 else:                   #third part
-                    channel_3[j-height_ch][i-width_ch]=frame[j][i]
-                    if(main_ch==3):
-                        buf_main[j-height_ch][i-width_ch]=frame[j][i]
+                    channel_3[x-width_ch][y-height_ch]=frame[y][x]
     # gp = [0,0,255,0,255,0,255,0,0]
     # for i in range(0,3):
 
 
-    channel_0[y_ver][x_ver] = [0,0,255]
-    channel_0[y_ver][x_ver+1] = [0,255,0]
-    channel_0[y_ver][x_ver+2] = [255,0,0]
 
-    channel_1[y_ver][x_ver] = [0,0,255]
-    channel_1[y_ver][x_ver+1] = [0,255,0]
-    channel_1[y_ver][x_ver+2] = [255,0,0]
+    channel_0[x_ver][y_ver] = [0,0,255]
+    channel_0[x_ver+1][y_ver] = [0,255,0]
+    channel_0[x_ver+2][y_ver] = [255,0,0]
 
-    channel_2[y_ver][x_ver] = [0,0,255]
-    channel_2[y_ver][x_ver+1] = [0,255,0]
-    channel_2[y_ver][x_ver+2] = [255,0,0]
+    channel_1[x_ver][y_ver] = [0,0,255]
+    channel_1[x_ver+1][y_ver] = [0,255,0]
+    channel_1[x_ver+2][y_ver] = [255,0,0]
 
-    channel_3[y_ver][x_ver] = [0,0,255]
-    channel_3[y_ver][x_ver+1] = [0,255,0]
-    channel_3[y_ver][x_ver+2] = [255,0,0]
+    channel_2[x_ver][y_ver] = [0,0,255]
+    channel_2[x_ver+1][y_ver] = [0,255,0]
+    channel_2[x_ver+2][y_ver] = [255,0,0]
 
-
-    #channel_0=np.append(channel_0,[0,0,255])
-    # if(channel_0[y_ver][x_ver]==[255,0,0]):
-    #     print("красный пиксель захвачен")
-    # else:
-    #     print("красный пиксель не захвачен")
-
-
-
+    channel_3[x_ver][y_ver] = [0,0,255]
+    channel_3[x_ver+1][y_ver] = [0,255,0]
+    channel_3[x_ver+2][y_ver] = [255,0,0]
     ret = (channel_0,channel_1,channel_2,channel_3,[x_ver,y_ver])
     return ret
 
 def noise_for_ch_0(channels,width,height,num):
     print("Noise in "+str(num)+"channel!")
-    for i in range(int(width/2)):
-        for j in range(int(height/2)):
-            channels[num][j][i]=[0,0,255]
+    for x in range(int(width/2)):
+        for y in range(int(height/2)):
+            channels[num][x][y]=[0,0,255]
     return channels
 
 def assemble_pic_0(frame,width,height,channels,main_ch,cords):
@@ -84,7 +68,7 @@ def assemble_pic_0(frame,width,height,channels,main_ch,cords):
     for z in range(0,4):
         for i in range(0,3):
             for j in range(0,3):
-                if(channels[z][y_ver][x_ver+i][j]>=ideal[i*3+j]-delta and channels[z][y_ver][x_ver+i][j]<=ideal[i*3+j]+delta):
+                if(channels[z][x_ver+i][y_ver][j]>=ideal[i*3+j]-delta and channels[z][x_ver+i][y_ver][j]<=ideal[i*3+j]+delta):
                     counter+=1
         if(counter==9):
             print("In channel "+str(z)+" NO noise")
@@ -93,16 +77,21 @@ def assemble_pic_0(frame,width,height,channels,main_ch,cords):
             print("In channel "+str(z)+" IS noise")
         counter=0
 
-    for i in range(int(width)):
-        for j in range(int(height)):
-            if(i<(int(width/2))):
-                if(j<int(height/2)):
-                    frame[j][i]=channels[0][j][i]
+    for x in range(int(width)):
+        for y in range(int(height)):
+            if(x<(int(width/2))):
+                if(y<int(height/2)):
+                    # frame[y][x]=channels[0][x][y]
+                    frame[y][x]=channels[0][x][y]
                 else:
-                    frame[j][i]=channels[2][j-int(height/2)][i]
+                    # frame[y][x]=channels[2][x][y-int(height/2)]
+                    frame[y][x]=channels[2][x][y-int(height/2)]
             else:
-                if(j<int(height/2)):
-                    frame[j][i]=channels[1][j][i-int(width/2)]
+                if(y<int(height/2)):
+                    # frame[y][x]=channels[1][x-int(width/2)][y]
+                    frame[y][x]=channels[1][x-int(width/2)][y]
                 else:
-                    frame[j][i]=channels[3][j-int(height/2)][i-int(width/2)]
+                    # frame[y][x]=channels[3][x-int(width/2)][y-int(height/2)]
+                    # frame[y][x]=channels[3][x-int(width/2)][y-int(height/2)]
+                    frame[y][x]=channels[3][x-int(width/2)][y-int(height/2)]
     return frame
