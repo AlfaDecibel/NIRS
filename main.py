@@ -38,8 +38,6 @@ while True:
 
     cords=channels[4]
 
-    # channels=tr_rc.noise_for_ch_0(channels,width,height,0)
-
     frame=tr_rc.assemble_pic_0(frame,width,height,channels,0,cords)
     cv2.imshow('channel_0', channels[0])
     cv2.imshow('channel_1', channels[1])
