@@ -37,8 +37,11 @@ while True:
     channels=tr_rc.split_pic_0(frame,width,height,channel_0,channel_1,channel_2,channel_3,0)
 
     cords=channels[4]
-
-    frame=tr_rc.assemble_pic_0(frame,width,height,channels,0,cords)
+    priority=channels[5]
+    channels=tr_rc.noise_for_ch_0(channels,width,height,0)
+    channels=tr_rc.noise_for_ch_0(channels,width,height,1)
+    channels=tr_rc.noise_for_ch_0(channels,width,height,2)
+    frame=tr_rc.assemble_pic_0(frame,width,height,channels,0,cords,priority)
     cv2.imshow('channel_0', channels[0])
     cv2.imshow('channel_1', channels[1])
     cv2.imshow('channel_2', channels[2])
