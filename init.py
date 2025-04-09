@@ -22,3 +22,10 @@ def init_chan(num,width,height,met_of_split): #new channel generate
             for j in range(height_ch):
                 image[i][j] = [i + j, i, j]  #filling image gradient
         return image
+
+def init_frame2(height,width):
+    image = np.zeros(( height,width, 3), dtype=np.uint8)
+    for i in range(height):
+                for j in range(width):
+                    image[i][j] = [0, 0, 0]  #filling image gradient
+    return image

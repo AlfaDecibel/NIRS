@@ -15,3 +15,12 @@ def finding():
 
     res = (x_0,y_0,x_1,y_1) #упаковка результатов
     return res
+
+def find_ver_pix(last_cords):
+    verif_pixels = [[100,80],[200,80],[100,160],[200,160]]
+
+    while(match_ver == 0):
+
+        numb=numb-1
+        if(numb==-1):
+            numb=3
